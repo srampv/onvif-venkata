@@ -1,0 +1,93 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.onvif</groupId>
+		<artifactId>onvif</artifactId>
+		<version>1.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>onvif-ws-client</artifactId>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-frontend-jaxws</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.cxf</groupId> -->
+		<!-- <artifactId>cxf-rt-transports-http-hc</artifactId> -->
+		<!-- <version>${cxf.version}</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.apache.cxf</groupId>
+			<artifactId>cxf-rt-transports-http-jetty</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.cxf</groupId> -->
+		<!-- <artifactId>cxf-rt-ws-addr</artifactId> -->
+		<!-- <version>${cxf.version}</version> -->
+		<!-- </dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.apache.cxf</groupId> -->
+		<!-- <artifactId>cxf-rt-ws-policy</artifactId> -->
+		<!-- <version>${cxf.version}</version> -->
+		<!-- </dependency> -->
+		<dependency>
+			<groupId>org.apache.cxf.services.wsn</groupId>
+			<artifactId>cxf-services-wsn-core</artifactId>
+			<version>${cxf.version}</version>
+		</dependency>
+	</dependencies>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.cxf</groupId>
+				<artifactId>cxf-codegen-plugin</artifactId>
+				<version>${cxf.version}</version>
+				<executions>
+					<execution>
+						<id>generate-ws-stubs</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>wsdl2java</goal>
+						</goals>
+						<configuration>
+							<wsdlRoot>${basedir}/src/main/resources/wsdl</wsdlRoot>
+							<sourceRoot>${basedir}/src/main/java</sourceRoot>
+							<includes>
+								<include>*.wsdl</include>
+							</includes>
+							<defaultOptions>
+								<extraargs>
+									<!-- DataMapper compatibility requires that the boolean getters 
+										and setters follow naming conventions for other getters and setters. -->
+									<extraarg>-xjc-Xbg</extraarg>
+									<extraarg>-verbose</extraarg>
+									<extraarg>-catalog</extraarg>
+									<extraarg>${basedir}/src/main/resources/wsdl/jax-ws-catalog.xml</extraarg>
+									<extraarg>-wsdlLocation</extraarg>
+									<extraarg></extraarg>
+								</extraargs>
+							</defaultOptions>
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.cxf</groupId>
+						<artifactId>cxf-rt-bindings-soap</artifactId>
+						<version>3.1.0</version>
+					</dependency>
+					<!-- Boolean getters/setters -->
+					<dependency>
+						<groupId>org.apache.cxf.xjcplugins</groupId>
+						<artifactId>cxf-xjc-boolean</artifactId>
+						<version>3.1.0</version>
+					</dependency>
+				</dependencies>
+			</plugin>
+		</plugins>
+	</build>
+</project>
